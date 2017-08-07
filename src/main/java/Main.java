@@ -17,7 +17,7 @@
 */
 public class Main {
     public static void main(String[] args) {
-        MinHash<String> stringMinHash = new MinHash<String>(20);
+        MinHash<String> stringMinHash = new MinHash<String>(0.001);
 
         String[] firstSet = {"After", "pre-processing", "the", "text", "data", "we", "can", "then", "proceed", "to",
                 "generate", "features", "For document clustering, one of the most common ways to generate features " +

@@ -29,11 +29,39 @@ public class MinHash<E> {
     private int[] firstMinHashValues;
     private int[] secondMinHashValues;
 
+    private double accuracy;
+
+    /**
+     * Create a Minhash based on a specified accuracy
+     * @param accuracy
+     * @return an instance of MinHash
+     */
+    public MinHash(double accuracy){
+        int noOfHashFunctions = (int)Math.ceil(1 / (accuracy * accuracy));
+        initMinHash(noOfHashFunctions);
+        setAccuracy(accuracy);
+    }
+    /**
+     * Set the accuracy of Minhash
+     * @param accuracy
+     */
+    public void setAccuracy(double accuracy) {
+        this.accuracy = accuracy;
+    }
+
+    /**
+     * Return the accuracy of Minhash
+     * @return a double value of the accuracy
+     */
+    public double getAccuracy() {
+        return accuracy;
+    }
+
     /**
      * Initialize the MinHash by specifying the number of signatures(correspond to hash functions)
      * @param noOfHashFunctions is the number of hash functions
      */
-    public MinHash(int noOfHashFunctions) {
+    private void initMinHash(int noOfHashFunctions) {
         this.noOfSimilarities = 0;
         this.noOfHashFunctions = noOfHashFunctions;
         firstMinHashValues = new int[noOfHashFunctions];
