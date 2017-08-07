@@ -28,6 +28,11 @@ public class MinHash<E> {
         int[] firstHashValues = hashValues[0];
         int[] secondHashValues = hashValues[1];
 
+//        System.out.print("Set 1 : ");
+//        print(firstHashValues);
+//        System.out.print("Set 2 : ");
+//        print(secondHashValues);
+
         int tempFirstMinHash;
         int tempFirstHash;
         int tempSecondMinHash;
@@ -64,20 +69,24 @@ public class MinHash<E> {
     public int[][] getHashValues(E item1, E item2, int count) {
         int[] firstHashCodes = new int[count];
         int[] secondHashCodes = new int[count];
-        int machineWordSize = Integer.SIZE;
-        int hashCodeSize = machineWordSize / 2;
-        int hashCodeSizeDiff = machineWordSize - hashCodeSize;
         int hstart1 = item1.hashCode();
         int hstart2 = item2.hashCode();
         int tempRandomInt;
-//        int bmax = 1 << hashCodeSizeDiff;
         Random rnd = new Random();
 
         for (int i = 0; i < count; i++) {
-            tempRandomInt = rnd.nextInt();
-            firstHashCodes[i] = ((hstart1 * (i * 2 + 1)) + tempRandomInt) >> hashCodeSizeDiff;
-            secondHashCodes[i] = ((hstart2 * (i * 2 + 1)) + tempRandomInt) >> hashCodeSizeDiff;
+            tempRandomInt = Math.abs(rnd.nextInt());
+            firstHashCodes[i] = ((hstart1 * (i * 2 + 1)) + tempRandomInt) % 1540483477;
+            secondHashCodes[i] = ((hstart2 * (i * 2 + 1)) + tempRandomInt) % 1540483477;
         }
         return new int[][]{firstHashCodes, secondHashCodes};
+    }
+
+
+    void print(int[] a){
+        for(int x : a) {
+            System.out.print(a + ", ");
+        }
+        System.out.println();
     }
 }

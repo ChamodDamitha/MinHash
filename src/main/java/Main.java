@@ -3,10 +3,10 @@
  */
 public class Main {
     public static void main(String[] args) {
-        MinHash<String> stringMinHash = new MinHash<String>(4);
+        MinHash<String> stringMinHash = new MinHash<String>(100);
 
-        String[] firstSet = {"a", "b", "c", "d"};
-        String[] secondSet = {"a", "a", "a", "a"};
+        String[] firstSet = {"a", "bds", "c", "d"};
+        String[] secondSet = {"a", "b", "e", "d"};
 
         for (int i = 0; i < 4; i++) {
             stringMinHash.addProperty(firstSet[i], secondSet[i]);
