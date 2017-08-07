@@ -1,7 +1,26 @@
+/*
+* Copyright (c) 2017, WSO2 Inc. (http://www.wso2.org) All Rights Reserved.
+*
+* WSO2 Inc. licenses this file to you under the Apache License,
+* Version 2.0 (the "License"); you may not use this file except
+* in compliance with the License.
+* You may obtain a copy of the License at
+*
+* http://www.apache.org/licenses/LICENSE-2.0
+*
+* Unless required by applicable law or agreed to in writing,
+* software distributed under the License is distributed on an
+* "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+* KIND, either express or implied. See the License for the
+* specific language governing permissions and limitations
+* under the License.
+*/
+
 import java.util.Random;
 
 /**
- * Created by chamod on 8/6/17.
+ * Probabilistic data structure to calculate the similarity of two data sets
+ * @param <E> is the type of data to be checked for similarity
  */
 public class MinHash<E> {
     private int noOfHashFunctions;
@@ -10,6 +29,10 @@ public class MinHash<E> {
     private int[] firstMinHashValues;
     private int[] secondMinHashValues;
 
+    /**
+     * Initialize the MinHash by specifying the number of signatures(correspond to hash functions)
+     * @param noOfHashFunctions is the number of hash functions
+     */
     public MinHash(int noOfHashFunctions) {
         this.noOfSimilarities = 0;
         this.noOfHashFunctions = noOfHashFunctions;
@@ -23,8 +46,14 @@ public class MinHash<E> {
         }
     }
 
-    public boolean addProperty(E firstSet, E secondSet) {
-        int[][] hashValues = getHashValues(firstSet, secondSet, noOfHashFunctions);
+    /**
+     * Adding the new property to the MinHash by calculating their signatures
+     * @param firstSetValue
+     * @param secondSetValue
+     * @return
+     */
+    public boolean addProperty(E firstSetValue, E secondSetValue) {
+        int[][] hashValues = getHashValues(firstSetValue, secondSetValue, noOfHashFunctions);
         int[] firstHashValues = hashValues[0];
         int[] secondHashValues = hashValues[1];
 
@@ -61,30 +90,43 @@ public class MinHash<E> {
         return true;
     }
 
+    /**
+     * Get the similarity of the two sets
+     * @return the similarity as rate, a number in the range [0, 1]
+     */
     public double getSimilarity() {
         return (double) noOfSimilarities / noOfHashFunctions;
     }
 
 
-    public int[][] getHashValues(E item1, E item2, int count) {
-        int[] firstHashCodes = new int[count];
-        int[] secondHashCodes = new int[count];
+    /**
+     * Calculate hash values for items from two sets
+     * @param item1 is the item from first set
+     * @param item2 is the item from second set
+     * @param noOfHashes is the number of hash values needed
+     * @return a 2D integer array containing hash values for each item
+     */
+    private int[][] getHashValues(E item1, E item2, int noOfHashes) {
+        final int primeConstant = 1540483477;
+
+        int[] firstHashCodes = new int[noOfHashes];
+        int[] secondHashCodes = new int[noOfHashes];
         int hstart1 = item1.hashCode();
         int hstart2 = item2.hashCode();
         int tempRandomInt;
         Random rnd = new Random();
 
-        for (int i = 0; i < count; i++) {
+        for (int i = 0; i < noOfHashes; i++) {
             tempRandomInt = Math.abs(rnd.nextInt());
-            firstHashCodes[i] = ((hstart1 * (i * 2 + 1)) + tempRandomInt) % 1540483477;
-            secondHashCodes[i] = ((hstart2 * (i * 2 + 1)) + tempRandomInt) % 1540483477;
+            firstHashCodes[i] = ((hstart1 * (i * 2 + 1)) + tempRandomInt) % primeConstant;
+            secondHashCodes[i] = ((hstart2 * (i * 2 + 1)) + tempRandomInt) % primeConstant;
         }
         return new int[][]{firstHashCodes, secondHashCodes};
     }
 
 
-    void print(int[] a){
-        for(int x : a) {
+    void print(int[] a) {
+        for (int x : a) {
             System.out.print(a + ", ");
         }
         System.out.println();
